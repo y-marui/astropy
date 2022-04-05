@@ -4,7 +4,6 @@
 Handles the "LaTeX" unit format.
 """
 
-from email.policy import default
 import re
 
 import numpy as np
