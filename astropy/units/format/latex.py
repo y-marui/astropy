@@ -95,7 +95,7 @@ class Latex(base.Base):
         return fr'$\mathrm{{{s}}}$'
 
     @classmethod
-    def format_exponential_notation(cls, val):
+    def format_exponential_notation(cls, val, format_spec=None):
         """
         Formats a value in exponential notation for LaTeX.
 
@@ -110,7 +110,8 @@ class Latex(base.Base):
             The value in exponential notation in a format suitable for LaTeX.
         """
         if np.isfinite(val):
-            m, ex = utils.split_mantissa_exponent(val, cls.format_spec, cls.remove_one)
+            m, ex = utils.split_mantissa_exponent(
+                val, format_spec or cls.format_spec, cls.remove_one)
 
             parts = []
             if m:
