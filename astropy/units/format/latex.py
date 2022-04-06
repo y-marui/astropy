@@ -10,9 +10,6 @@ import numpy as np
 
 from . import base, core, utils
 
-default_format_spec = ".8g"
-defalut_remove_one = False
-
 
 class Latex(base.Base):
     """
@@ -21,6 +18,10 @@ class Latex(base.Base):
     Attempts to follow the `IAU Style Manual
     <https://www.iau.org/static/publications/stylemanual1989.pdf>`_.
     """
+
+    format_spec = ".8g"
+    remove_one = False
+    fromat_flac = r'\frac{{{}}}{{{}}}'
 
     @classmethod
     def _latex_escape(cls, name):
@@ -64,7 +65,7 @@ class Latex(base.Base):
             else:
                 positives = '1'
             negatives = cls._format_unit_list(negatives)
-            s = fr'\frac{{{positives}}}{{{negatives}}}'
+            s = cls.fromat_flac.format(positives, negatives)
         else:
             positives = cls._format_unit_list(positives)
             s = positives
@@ -94,7 +95,7 @@ class Latex(base.Base):
         return fr'$\mathrm{{{s}}}$'
 
     @classmethod
-    def format_exponential_notation(cls, val, format_spec=None, remove_one=None):
+    def format_exponential_notation(cls, val):
         """
         Formats a value in exponential notation for LaTeX.
 
@@ -103,26 +104,13 @@ class Latex(base.Base):
         val : number
             The value to be formatted
 
-        format_spec : str, optional
-            Format used to split up mantissa and exponent
-
         Returns
         -------
         latex_string : str
             The value in exponential notation in a format suitable for LaTeX.
         """
-        if format_spec is None:
-            fmt_spec = default_format_spec
-        else:
-            fmt_spec = format_spec
-
-        if remove_one is None:
-            rm_one = defalut_remove_one
-        else:
-            rm_one = remove_one
-
         if np.isfinite(val):
-            m, ex = utils.split_mantissa_exponent(val, fmt_spec, rm_one)
+            m, ex = utils.split_mantissa_exponent(val, cls.format_spec, cls.remove_one)
 
             parts = []
             if m:
@@ -147,24 +135,7 @@ class Latex2(Latex):
     Output LaTeX to display the unit using \\dfrac instead of \\flac.
     """
     name = 'latex2'
-
-    @classmethod
-    def _format_bases(cls, unit):
-        positives, negatives = utils.get_grouped_by_powers(
-            unit.bases, unit.powers)
-
-        if len(negatives):
-            if len(positives):
-                positives = cls._format_unit_list(positives)
-            else:
-                positives = '1'
-            negatives = cls._format_unit_list(negatives)
-            s = fr'\dfrac{{{positives}}}{{{negatives}}}'
-        else:
-            positives = cls._format_unit_list(positives)
-            s = positives
-
-        return s
+    fromat_flac = r'\dfrac{{{}}}{{{}}}'
 
 
 class LatexInline(Latex):
@@ -189,21 +160,4 @@ class LatexInline2(Latex):
     Output LaTeX to display the unit using slash instead of \\flac.
     """
     name = 'latex_inline2'
-
-    @classmethod
-    def _format_bases(cls, unit):
-        positives, negatives = utils.get_grouped_by_powers(
-            unit.bases, unit.powers)
-
-        if len(negatives):
-            if len(positives):
-                positives = cls._format_unit_list(positives)
-            else:
-                positives = '1'
-            negatives = cls._format_unit_list(negatives)
-            s = r'{0}/{1}'.format(positives, negatives)
-        else:
-            positives = cls._format_unit_list(positives)
-            s = positives
-
-        return s
+    fromat_flac = '{}/{}'

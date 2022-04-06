@@ -85,30 +85,23 @@ def quantity_support(xlabel="", ylabel="", format=None):
 
         @staticmethod
         def axislabel(unit, axis, format=None):
+            axis_label = ""
             if isinstance(axis, matplotlib.axis.XAxis):
                 axis_label = f"{xlabel} "
             elif isinstance(axis, matplotlib.axis.YAxis):
                 axis_label = f"{ylabel} "
-            else:
-                axis_label = ""
 
             if unit in [None, u.dimensionless_unscaled,
                         u.dimensionless_angles]:
                 label = axis_label
+            elif isinstance(format, str) and format.startswith("latex"):
+                label = r"{}$\left({}\right)$".format(axis_label, unit.to_string(format)[1:-1])
             else:
-                if isinstance(format, str) and format.startswith("latex"):
-                    label = r"{}$\left({}\right)$".format(axis_label, unit.to_string(format)[1:-1])
-                else:
-                    label = "{}({})".format(axis_label, unit.to_string(format))
+                label = "{}({})".format(axis_label, unit.to_string(format))
 
             return label
 
         def axisinfo(self, unit, axis):
-            if format is None:
-                fmt = default_formt
-            else:
-                fmt = format
-
             if unit == u.radian:
                 return units.AxisInfo(
                     majloc=ticker.MultipleLocator(base=np.pi / 2),
@@ -122,7 +115,7 @@ def quantity_support(xlabel="", ylabel="", format=None):
                     label=self.axislabel(unit, axis),
                 )
             elif unit is not None:
-                return units.AxisInfo(label=self.axislabel(unit, axis, fmt))
+                return units.AxisInfo(label=self.axislabel(unit, axis, format or default_formt))
             return None
 
         @staticmethod
