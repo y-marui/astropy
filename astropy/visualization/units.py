@@ -7,6 +7,8 @@ import numpy as np
 __doctest_skip__ = ['quantity_support']
 
 default_formt = 'latex_inline'
+braket_normal = r"{}$\left({}\right)$"
+braket_latex = "{}({})"
 
 
 def quantity_support(xlabel="", ylabel="", format=None):
@@ -95,9 +97,9 @@ def quantity_support(xlabel="", ylabel="", format=None):
                         u.dimensionless_angles]:
                 label = axis_label
             elif isinstance(format, str) and format.startswith("latex"):
-                label = r"{}$\left({}\right)$".format(axis_label, unit.to_string(format)[1:-1])
+                label = braket_latex.format(axis_label, unit.to_string(format)[1:-1])
             else:
-                label = "{}({})".format(axis_label, unit.to_string(format))
+                label = braket_normal.format(axis_label, unit.to_string(format))
 
             return label
 
