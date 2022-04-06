@@ -11,6 +11,7 @@ import numpy as np
 from . import base, core, utils
 
 default_format_spec = ".8g"
+defalut_remove_one = False
 
 
 class Latex(base.Base):
@@ -93,7 +94,7 @@ class Latex(base.Base):
         return fr'$\mathrm{{{s}}}$'
 
     @classmethod
-    def format_exponential_notation(cls, val, format_spec=None):
+    def format_exponential_notation(cls, val, format_spec=None, remove_one=None):
         """
         Formats a value in exponential notation for LaTeX.
 
@@ -115,8 +116,13 @@ class Latex(base.Base):
         else:
             fmt_spec = format_spec
 
+        if remove_one is None:
+            rm_one = defalut_remove_one
+        else:
+            rm_one = remove_one
+
         if np.isfinite(val):
-            m, ex = utils.split_mantissa_exponent(val, fmt_spec)
+            m, ex = utils.split_mantissa_exponent(val, fmt_spec, rm_one)
 
             parts = []
             if m:
