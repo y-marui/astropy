@@ -104,6 +104,9 @@ class Latex(base.Base):
         val : number
             The value to be formatted
 
+        format_spec : str, optional
+            Format used to split up mantissa and exponent
+
         Returns
         -------
         latex_string : str
