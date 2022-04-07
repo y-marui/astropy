@@ -7,8 +7,8 @@ import numpy as np
 __doctest_skip__ = ['quantity_support']
 
 default_formt = 'latex_inline'
-braket_normal = r"{}$\left({}\right)$"
-braket_latex = "{}({})"
+braket_normal = "{}({})"
+braket_latex = r"{}$\left({}\right)$"
 
 
 def quantity_support(xlabel="", ylabel="", format=None):
