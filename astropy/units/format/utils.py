@@ -57,7 +57,7 @@ def split_mantissa_exponent(v, format_spec=".8g", remove_one=False):
         Number representation formatting string
     remove_one : bool, optional
         Whether remove 1 at the head of expontila representaion
-        Change `1 \\times 10^{2}` to `10^{2}`
+        Change ``1 \\times 10^{2}` to `10^{2}``
 
     Returns
     -------
